@@ -1,0 +1,6 @@
+# -*- mode: gitignore; -*-
+*.tfvars
+*.tfvars.json
+*.tfstate
+*.tfstate.*
+.terraform/
