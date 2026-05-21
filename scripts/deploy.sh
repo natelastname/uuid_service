@@ -61,8 +61,18 @@ fi
 
 export LAMBDA_IMAGE_URI="${IMAGE_URI}"
 
-echo "Running infrastructure deploy via scripts/deploy.sh ..."
-bash "${ROOT_DIR}/scripts/deploy.sh"
+echo "Running infrastructure deploy via OpenTofu in infra/ ..."
+INFRA_DIR="${ROOT_DIR}/infra"
+
+if ! command -v tofu >/dev/null 2>&1; then
+  echo "OpenTofu (tofu) is not installed or not on PATH."
+  exit 1
+fi
+
+cd "${INFRA_DIR}"
+
+tofu init
+tofu apply -auto-approve -var "lambda_image_uri=${IMAGE_URI}"
 
 echo "Running post-deploy smoke test via scripts/smoke_test.py ..."
 "${ROOT_DIR}/scripts/smoke_test.py"

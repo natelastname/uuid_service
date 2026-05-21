@@ -14,10 +14,10 @@ test:
     PYTHONPATH=src pytest
 
 # Deploy infrastructure using the image built by CI for this commit.
-# This uses scripts/deploy_from_ci.sh, which discovers the AWS account,
+# This uses scripts/deploy.sh, which discovers the AWS account,
 # region, and image URI automatically when possible.
 deploy:
-    bash scripts/deploy_from_ci.sh
+    bash scripts/deploy.sh
 
 # Run the post-deploy smoke test against the live endpoint
 smoke-test:
