@@ -7,10 +7,32 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-if [ -z "${AWS_ACCOUNT_ID:-}" ] || [ -z "${AWS_REGION:-}" ]; then
-  echo "Please set AWS_ACCOUNT_ID and AWS_REGION environment variables."
-  exit 1
+# Discover AWS account ID if not provided.
+if [ -z "${AWS_ACCOUNT_ID:-}" ]; then
+  if ! command -v aws >/dev/null 2>&1; then
+    echo "AWS_ACCOUNT_ID is not set and aws CLI is not installed."
+    exit 1
+  fi
+  AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text 2>/dev/null || true)"
+  if [ -z "${AWS_ACCOUNT_ID}" ]; then
+    echo "Unable to determine AWS account ID via aws sts get-caller-identity."
+    echo "Set AWS_ACCOUNT_ID explicitly and try again."
+    exit 1
+  fi
 fi
+
+# Discover AWS region if not provided.
+if [ -z "${AWS_REGION:-}" ]; then
+  if command -v aws >/dev/null 2>&1; then
+    AWS_REGION="$(aws configure get region 2>/dev/null || true)"
+  fi
+  # Fallback to the infra default region if still empty.
+  if [ -z "${AWS_REGION}" ]; then
+    AWS_REGION="us-east-1"
+  fi
+fi
+
+echo "Using AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}, AWS_REGION=${AWS_REGION}"
 
 # Commit SHA to deploy. Defaults to the current HEAD in this repo.
 COMMIT_SHA="${COMMIT_SHA:-$(git -C "${ROOT_DIR}" rev-parse HEAD)}"
@@ -42,5 +64,5 @@ export LAMBDA_IMAGE_URI="${IMAGE_URI}"
 echo "Running infrastructure deploy via scripts/deploy.sh ..."
 bash "${ROOT_DIR}/scripts/deploy.sh"
 
-echo "Running post-deploy smoke test via scripts/smoke_test.sh ..."
-bash "${ROOT_DIR}/scripts/smoke_test.sh"
+echo "Running post-deploy smoke test via scripts/smoke_test.py ..."
+"${ROOT_DIR}/scripts/smoke_test.py"

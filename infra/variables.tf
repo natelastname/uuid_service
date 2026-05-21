@@ -32,3 +32,23 @@ variable "api_stage_name" {
   type        = string
   default     = "prod"
 }
+
+variable "project_name" {
+  description = "Logical project name used for tagging (e.g. 'uuid-service')."
+  type        = string
+  default     = "uuid-service"
+}
+
+
+variable "environment" {
+  description = "Environment name for this stack (e.g. dev, staging, prod)."
+  type        = string
+  default     = "prod"
+}
+
+variable "tags" {
+  description = "Additional tags to apply to all infra resources."
+  type        = map(string)
+  default     = {}
+}
+

@@ -25,3 +25,23 @@ variable "ecr_repository_name" {
   type        = string
   default     = "uuid-service"
 }
+
+
+variable "project_name" {
+  description = "Logical project name used for tagging (e.g. 'uuid-service')."
+  type        = string
+  default     = "uuid-service"
+}
+
+variable "environment" {
+  description = "Environment label for platform resources (e.g. platform, shared)."
+  type        = string
+  default     = "platform"
+}
+
+variable "tags" {
+  description = "Additional tags to apply to platform resources."
+  type        = map(string)
+  default     = {}
+}
+

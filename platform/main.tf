@@ -9,8 +9,24 @@ terraform {
   }
 }
 
+locals {
+  github_sub = "repo:${var.github_owner}/${var.github_repo}:ref:${var.github_ref}"
+
+  default_tags = merge(
+    {
+      Project     = var.project_name
+      Environment = var.environment
+    },
+    var.tags
+  )
+}
+
 provider "aws" {
   region = var.aws_region
+
+  default_tags {
+    tags = local.default_tags
+  }
 }
 
 # GitHub Actions OIDC provider for this AWS account.
@@ -22,10 +38,6 @@ resource "aws_iam_openid_connect_provider" "github" {
     "sts.amazonaws.com",
   ]
 
-}
-
-locals {
-  github_sub = "repo:${var.github_owner}/${var.github_repo}:ref:${var.github_ref}"
 }
 
 # IAM role assumed by GitHub Actions via OIDC.

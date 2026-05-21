@@ -174,7 +174,7 @@ This script:
   `"${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/uuid-service:${COMMIT_SHA}"`
 - Verifies the image exists in ECR (i.e., CI has built and pushed it).
 - Runs `scripts/deploy.sh` (OpenTofu `apply` with `lambda_image_uri` set).
-- Runs `scripts/smoke_test.sh`, which:
+- Runs `scripts/smoke_test.py`, which:
   - Reads `api_endpoint` from `tofu output`.
   - Calls `GET /uuid`.
   - Asserts HTTP 200 and that the JSON body contains a valid UUID v4.

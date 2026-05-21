@@ -9,8 +9,22 @@ terraform {
   }
 }
 
+locals {
+  default_tags = merge(
+    {
+      Project     = var.project_name
+      Environment = var.environment
+    },
+    var.tags
+  )
+}
+
 provider "aws" {
   region = var.aws_region
+
+  default_tags {
+    tags = local.default_tags
+  }
 }
 
 module "dynamodb_uuids" {

@@ -13,14 +13,12 @@ build:
 test:
     PYTHONPATH=src pytest
 
-# Deploy infrastructure using OpenTofu via helper script
+# Deploy infrastructure using the image built by CI for this commit.
+# This uses scripts/deploy_from_ci.sh, which discovers the AWS account,
+# region, and image URI automatically when possible.
 deploy:
-    bash scripts/deploy.sh
-
-# Deploy a specific commit from CI (wrapper around scripts/deploy_from_ci.sh)
-deploy-from-ci:
     bash scripts/deploy_from_ci.sh
 
 # Run the post-deploy smoke test against the live endpoint
 smoke-test:
-    bash scripts/smoke_test.sh
+    scripts/smoke_test.py
