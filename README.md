@@ -15,7 +15,7 @@ This repo is a small, realistic implementation of that idea.
 
 - **Language / runtime**: Python 3.12
 - **Serverless**: AWS Lambda (container image)
-- **API**: AWS API Gateway HTTP API (`GET /uuid`)
+- **API**: AWS API Gateway HTTP API (root route, `GET /`)
 - **Storage**: Amazon DynamoDB
 - **Container**: Docker + AWS Lambda base image for Python 3.12
 - **Registry**: Amazon ECR
@@ -63,3 +63,18 @@ bash scripts/push_image.sh
 # Deploy the current commit using the image from CI/ECR
 bash scripts/deploy.sh
 ```
+
+## Public demo
+
+A live deployment of this service is available at:
+
+- **UUID endpoint (custom domain)**: https://api.resultsmotivated.com/uuid_service
+
+Example request:
+
+```bash
+curl https://api.resultsmotivated.com/uuid_service
+# => {"uuid": "<uuid-v4>"}
+```
+
+
