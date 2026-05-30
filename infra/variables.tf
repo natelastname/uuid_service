@@ -33,6 +33,18 @@ variable "api_stage_name" {
   default     = "prod"
 }
 
+variable "api_custom_domain_name" {
+  description = "Optional custom domain name for the API Gateway HTTP API (e.g. api.example.com). Leave empty to skip custom domain configuration."
+  type        = string
+  default     = ""
+}
+
+variable "api_custom_path" {
+  description = "Base path segment for the API when using a custom domain (e.g. \"uuid_service\")."
+  type        = string
+  default     = "uuid_service"
+}
+
 variable "project_name" {
   description = "Logical project name used for tagging (e.g. 'uuid-service')."
   type        = string

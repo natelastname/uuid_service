@@ -3,7 +3,7 @@
 """Simple post-deploy smoke test.
 
 - Reads the API endpoint from OpenTofu outputs
-- Calls GET /uuid
+- Calls GET /
 - Asserts HTTP 200 and that the body contains a valid UUIDv4
 """
 
@@ -42,7 +42,8 @@ def main() -> int:
         print("api_endpoint output is empty; has the stack been deployed?", file=sys.stderr)
         return 1
 
-    url = api_endpoint.rstrip("/") + "/uuid"
+    # The API is now configured to serve the UUID at the root path.
+    url = api_endpoint.rstrip("/")
 
     print(f"Running smoke test against {url} ...")
 

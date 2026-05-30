@@ -41,9 +41,11 @@ module "uuid_lambda" {
 }
 
 module "api_gateway" {
-  source            = "./modules/api_gateway"
-  lambda_arn        = module.uuid_lambda.lambda_arn
-  lambda_invoke_arn = module.uuid_lambda.lambda_invoke_arn
-  api_name          = var.api_name
-  stage_name        = var.api_stage_name
+  source             = "./modules/api_gateway"
+  lambda_arn         = module.uuid_lambda.lambda_arn
+  lambda_invoke_arn  = module.uuid_lambda.lambda_invoke_arn
+  api_name           = var.api_name
+  stage_name         = var.api_stage_name
+  custom_domain_name = var.api_custom_domain_name
+  api_custom_path    = var.api_custom_path
 }
